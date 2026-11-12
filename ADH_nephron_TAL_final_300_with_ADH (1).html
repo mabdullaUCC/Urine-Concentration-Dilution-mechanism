@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>ADH — urine dilution and concentration</title><style>
+*{box-sizing:border-box}body{margin:0;background:#edf2f7;color:#203449;font:15px Arial,sans-serif}header{background:#153b5b;color:white;padding:16px 24px}h1{font-size:23px;margin:0 0 5px}header p{margin:0;color:#d6e8f4}.wrap{max-width:1500px;margin:auto;padding:14px}.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:white;border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:0 2px 8px #17365316}button{background:white;border:1px solid #aabac9;border-radius:7px;padding:9px 13px;font-weight:bold;color:#195177;cursor:pointer}button:hover{background:#e7f2fc}input{accent-color:#176cb1;vertical-align:middle}.panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:white;border-radius:12px;padding:13px;box-shadow:0 2px 10px #17365316;min-width:0}.panel h2{font-size:17px;margin:0 0 9px;padding:11px 12px;border:1px solid #ef8c66;border-radius:8px;background:#fff7f0;color:#dc4d20}.panel svg{display:block;width:100%;height:auto;border-radius:8px;background:#fffdf9}.stats{display:flex;gap:8px;margin-top:10px}.stat{background:#eaf3fa;border-radius:8px;flex:1;padding:9px;text-align:center;font-size:12px}.stat b{display:block;font-size:20px;margin-top:4px;color:#12679d}.note{background:white;padding:13px 16px;margin-top:13px;border-radius:10px;line-height:1.5}.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;margin:8px 0 0}.legend span:before{content:'●';margin-right:5px}.blue:before{color:#1674c9}.red:before{color:#e73c43}.green:before{color:#159667}.hiddenpath{fill:none;stroke:none}@media(max-width:850px){.panels{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.panel svg{scroll-behavior:auto}}
+/* Compact, slide-friendly two-column presentation */
+.wrap{max-width:1160px;padding:10px}
+.panels{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.panel{padding:9px}
+.panel h2{font-size:16px;padding:8px 10px;margin-bottom:6px}
+.panel svg{width:100%;max-width:510px;height:auto;margin:0 auto}
+.stats{gap:5px;margin-top:6px}
+.stat{padding:6px 3px;font-size:11px}
+.stat b{font-size:17px}
+@media(max-width:850px){.panels{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.wrap{min-width:0}.panel h2{font-size:12px}.stat{font-size:10px}.stat b{font-size:14px}}
+
+body{background:#f5f8fb}.wrap{max-width:1080px}.controls{gap:9px}.scenario{display:flex;gap:5px;flex-wrap:wrap}.controls button.active{background:#126ca5;color:#fff;border-color:#126ca5}.controls button{padding:9px 11px}.pill{background:#e9f3fc;border-radius:20px;padding:9px 12px;font-weight:bold;color:#155c8b}.panels{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(275px,.9fr);align-items:start}.panel svg{max-width:510px}.detail{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 10px #17365316}.state{font-size:23px;font-weight:bold;color:#17547a}.desc{margin:12px 0;line-height:1.5}.metrics{display:grid;gap:9px;margin:20px 0}.metrics>div{background:#eef6fb;border-radius:8px;padding:12px;display:flex;justify-content:space-between;gap:12px}.metrics strong{color:#126ca5;white-space:nowrap}.explain{line-height:1.6}.key{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;font-size:13px}.key span:nth-child(1){color:#1873cb}.key span:nth-child(2){color:#dc3545}.key span:nth-child(3){color:#159567}.caveat{font-size:12px;line-height:1.5;color:#566c7e;margin-top:20px}@media(max-width:720px){.panels{grid-template-columns:1fr}.detail{padding:15px}}
+
+/* Smooth scenario and control transitions */
+.controls button{transition:background-color .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease,transform .2s ease}
+.controls button:hover{transform:translateY(-1px)}
+.pill,.metrics strong,.state,.desc,.explain{transition:color .45s ease,background-color .45s ease}
+#ductArrows,#ureaArrow{transition:opacity .9s ease}
+#particleLegend .legend-choice{cursor:pointer;outline:none}#particleLegend .legend-choice:focus-visible .legend-hit{stroke:#155e9c;stroke-width:2}#particleLegend .legend-choice .legend-hit{fill:transparent;stroke:transparent}#particleLegend .legend-choice.selected .legend-hit{fill:#e7f2ff;stroke:#9dc5e8}#particleLegend .legend-choice.dimmed{opacity:.42}#particleLegend .legend-choice:hover .legend-hit{fill:#eef6ff}
+#talWaterArrows{transition:opacity .9s ease}#talWaterArrows path{stroke:#1873cb;stroke-width:3.5;stroke-linecap:round;fill:none}#ureaPathOverlay{transition:opacity .55s ease}#ureaPathOverlay .urea-path-line{fill:none;stroke:#79d6a4;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:15 11;marker-end:url(#urea-path-tip);animation:ureaPathTravel 1.8s linear infinite;filter:drop-shadow(0 0 2px #fff)}#ureaPathOverlay .recycle{stroke-width:5;stroke-dasharray:9 10}@keyframes ureaPathTravel{to{stroke-dashoffset:-52}}#showUreaPath.active{background:#dcf8e7;color:#17673d;border-color:#73c59b}@media(prefers-reduced-motion:reduce){#ureaPathOverlay .urea-path-line{animation:none}}
+.ureaSteps{margin-top:16px;background:#eefaf3;border:1px solid #bfe3cf;border-radius:10px;padding:12px 16px}.ureaSteps h3{margin:0 0 6px;font-size:15px;color:#1d6a43}.ureaSteps ol{margin:0;padding-left:20px;font-size:13.5px;line-height:1.5}.ureaSteps li{margin:5px 0}
+</style></head><body><header><h1>ADH and the renal concentrating mechanism</h1><p>Select a physiological state, then add or remove ADH to observe collecting-duct water reabsorption.</p></header><main class="wrap"><div class="controls"><div class="scenario"><button class="active" id="normal">Normal hydration</button><button id="over">Overhydration</button><button id="dehyd">Dehydration</button><button id="di">Diabetes insipidus</button><button id="siadh">SIADH</button><button id="talMutation">TAL water-permeable mutation</button></div><label id="diTypeWrap" style="display:none;align-items:center;gap:6px;background:#eef6ff;padding:7px 10px;border-radius:8px;font-weight:bold">DI type <select id="diType" style="padding:7px;border:1px solid #9bb4c9;border-radius:6px"><option value="central">Central DI (responds to ADH)</option><option value="nephrogenic">Nephrogenic DI (resistant)</option></select></label><button id="addADH">+ Add ADH</button><button id="removeADH">− Remove ADH</button><button id="showUreaPath" aria-pressed="false">↝ Show urea pathway</button><button id="addUrea">+ Add urea</button><button id="removeUrea">− Remove urea</button><span class="pill" id="ureaStatus">Urea recycling: on</span><span class="pill" id="adhStatus">ADH: moderate</span><button id="play">⏸ Pause</button><button id="reset">↺ Reset</button><label>Speed <input id="speed" max="10" min="1" type="range" value="5"/><b id="speedval">5</b></label></div><div class="panels"><section class="panel"><h2>Renal concentrating mechanism — one nephron</h2><svg aria-label="Animated loop of Henle and collecting duct with adjustable ADH" role="img" viewbox="0 0 610 760">
+<defs><lineargradient id="med-low" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fffdf8"></stop><stop offset="0.45" stop-color="#fff1e2"></stop><stop offset="1" stop-color="#f7dfc7"></stop></lineargradient><lineargradient id="tube-low" x1="0" x2="1" y1="0" y2="0"><stop stop-color="#e2bd98"></stop><stop offset=".2" stop-color="#fff1dd"></stop><stop offset=".7" stop-color="#fffaf0"></stop><stop offset="1" stop-color="#d5a47a"></stop></lineargradient><marker id="arrow-low" markerheight="7" markerwidth="7" orient="auto" refx="5" refy="3"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#203b50" stroke-width="1.2"></path></marker><marker id="urea-path-tip" viewBox="0 0 10 10" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M2 2 L8 5 L2 8" fill="none" stroke="#4fb985" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect fill="url(#med-low)" height="590" rx="10" width="598" x="6" y="8"></rect>
+<defs><linearGradient id="urea-glow" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#159667" stop-opacity="0"/><stop offset="1" stop-color="#159667" stop-opacity=".3"/></linearGradient></defs>
+<g id="ureaGlow" opacity="0" pointer-events="none"><rect x="6" y="371" width="598" height="227" rx="10" fill="url(#urea-glow)"/><text x="16" y="565" font-size="11" font-style="italic" font-weight="bold" fill="#25744b">Urea-rich medulla</text></g>
+<g fill="#5b4636" font-family="Arial" font-size="16" font-weight="bold"><text font-weight="bold" x="16" y="36">Cortex</text><text x="16" y="170">Outer medulla</text><text x="16" y="355">Inner medulla</text><text id="inter0" x="17" y="64">300</text><text id="inter1" x="17" y="228">600</text><text id="inter2" x="17" y="375">900</text><text id="inter3" x="12" y="520">1200</text><text x="12" y="540">mOsm/kg</text></g>
+<g opacity=".35" stroke="#a88c72" stroke-dasharray="4 5"><path d="M60 60H590 M60 224H590 M60 371H590 M60 518H590"></path></g>
+<!-- Tubule outlines and lumens -->
+<path d="M133 112 L133 474 Q133 552 208 552 Q284 552 284 474 L284 350" fill="none" stroke="#d4a77f" stroke-linecap="round" stroke-width="37"></path><path d="M133 112 L133 474 Q133 552 208 552 Q284 552 284 474 L284 350" fill="none" stroke="url(#tube-low)" stroke-linecap="round" stroke-width="29"></path>
+<path d="M284 350 L284 108 Q284 80 316 80 L411 80 Q437 80 437 110 L437 550" fill="none" stroke="#d4a77f" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"></path><path d="M284 350 L284 108 Q284 80 316 80 L411 80 Q437 80 437 110 L437 550" fill="none" stroke="url(#tube-low)" stroke-linecap="round" stroke-linejoin="round" stroke-width="40"></path>
+<text x="100" y="94" font-size="12" font-weight="bold" fill="#235778">From glomerulus ↓</text>
+<!-- Fluid direction -->
+<g fill="none" marker-end="url(#arrow-low)" stroke="#26394c" stroke-width="2"><path d="M133 52V83"></path><path d="M325 47H370"></path></g>
+<!-- Fluid osmolality -->
+<g class="osm-label" fill="#20252b" font-family="Arial" font-size="19" font-weight="bold" text-anchor="middle"><text id="tub0" x="133" y="157">300</text><text id="tub1" x="133" y="278">600</text><text id="tub2" x="133" y="405">900</text><text id="tub3" x="208" y="555">1200</text><text id="tub4" x="284" y="407">700</text><text id="tub5" x="284" y="295">400</text><text id="tub6" x="284" y="192">100</text><text id="tub7" x="360" y="72">100</text><text id="cd0" x="437" y="155">100</text><text id="cd1" x="437" y="228">100</text><text id="cd2" x="437" y="301">100</text><text id="cd3" x="437" y="373">100</text><text id="cd4" x="437" y="450">100</text><text id="cd5" x="437" y="536">100</text></g><path d="M126 285 h-27" fill="none" stroke="#1873cb" stroke-width="4"></path><path d="M99 279l-11 6 11 6z" fill="#1873cb"></path><path d="M126 418 h-27" fill="none" stroke="#1873cb" stroke-width="4"></path><path d="M99 412l-11 6 11 6z" fill="#1873cb"></path><path d="M135 515 h-27" fill="none" stroke="#1873cb" stroke-width="4"></path><path d="M108 509l-11 6 11 6z" fill="#1873cb"></path><path d="M305 245h37" stroke="#e83f48" stroke-width="4"></path><path d="M342 239l11 6 -11 6z" fill="#e83f48"></path><path d="M305 320h37" stroke="#e83f48" stroke-width="4"></path><path d="M342 314l11 6 -11 6z" fill="#e83f48"></path><text fill="#34485a" font-size="15" font-weight="bold" text-anchor="middle" x="133" y="590">Descending</text><text fill="#34485a" font-size="15" font-weight="bold" text-anchor="middle" x="284" y="590">Ascending</text><text fill="#34485a" font-size="15" font-weight="bold" text-anchor="start" x="468" y="548">Collecting duct</text>
+<g id="talWaterArrows" opacity="0" pointer-events="none" aria-label="Abnormal water reabsorption from thick ascending limb"><path d="M266 174 H243"/><path d="M250 168 L241 174 L250 180"/><path d="M266 240 H243"/><path d="M250 234 L241 240 L250 246"/><text x="308" y="276" font-size="12" font-weight="bold" fill="#1267ad">TAL: H₂O exits</text></g>
+<path class="hiddenpath" d="M133 112 L133 474 Q133 552 208 552 Q284 552 284 474 L284 350 L284 108 Q284 80 316 80 L411 80 Q437 80 437 110 L437 550" id="flow-low"></path><path class="hiddenpath" id="urea-loop" d="M284 474 L284 108 Q284 80 316 80 L411 80 Q437 80 437 110 L437 505 Q408 513 373 515 Q345 515 328 493 Q311 481 300 477 Q292 474 284 476"/>
+<g id="ureaPathOverlay" opacity="0" pointer-events="none" aria-label="Urea pathway overlay">
+<!-- Tubular flow: glomerular filtrate through loop, distal segment and collecting duct -->
+<path class="urea-path-line" d="M133 112 L133 474 Q133 552 208 552 Q284 552 284 474 L284 350 L284 108 Q284 80 316 80 L411 80 Q437 80 437 110 L437 505"/>
+<!-- Approximately half of filtered urea is passively reabsorbed in the proximal tubule (schematic inlet) -->
+<path class="urea-path-line recycle" d="M133 117 Q115 117 91 117"/>
+<text x="66" y="103" fill="#25744b" font-size="10" font-weight="bold">Proximal urea (~50%)</text>
+<text x="66" y="114" fill="#25744b" font-size="10">reabsorption</text>
+<!-- Urea diffuses out of inner medullary collecting duct -->
+<path class="urea-path-line" d="M437 505 Q408 513 373 515 Q345 515 328 493"/>
+<!-- Schematic recycling: interstitium to thin loop of Henle -->
+<path class="urea-path-line recycle" d="M328 493 Q311 481 300 477 Q292 474 284 476"/>
+<rect x="466" y="300" width="138" height="62" rx="8" fill="#edfff4" stroke="#a7ddbd"/>
+<text x="474" y="319" fill="#25744b" font-size="11.5" font-weight="bold">Urea pathway:</text>
+<text x="474" y="335" fill="#25744b" font-size="11.5" font-weight="bold">tubular flow → IMCD</text>
+<text x="474" y="351" fill="#25744b" font-size="11.5" font-weight="bold">→ recycled to loop</text>
+</g>
+<g id="particleLegend" aria-label="Click a legend item to isolate its particles; click again to show all" font-family="Arial, sans-serif" font-size="15" font-weight="bold"><rect x="476" y="95" width="128" height="134" rx="10" fill="#ffffff" fill-opacity=".96" stroke="#cbd8e2" stroke-width="1.5"/><text x="487" y="115" fill="#33485b" font-size="13">SHOW PARTICLES</text>
+<g id="legend-water" class="legend-choice" role="button" tabindex="0" aria-label="Show water only" aria-pressed="false"><rect class="legend-hit" x="483" y="121" width="113" height="29" rx="6"/><circle cx="495" cy="135" r="6" fill="#1674c9"/><text x="510" y="140" fill="#203449">Water</text></g>
+<g id="legend-salt" class="legend-choice" role="button" tabindex="0" aria-label="Show sodium chloride only" aria-pressed="false"><rect class="legend-hit" x="483" y="152" width="113" height="29" rx="6"/><circle cx="495" cy="166" r="6" fill="#e73c43"/><text x="510" y="171" fill="#203449">NaCl</text></g>
+<g id="legend-urea" class="legend-choice" role="button" tabindex="0" aria-label="Show urea only" aria-pressed="false"><rect class="legend-hit" x="483" y="183" width="113" height="29" rx="6"/><circle cx="495" cy="197" r="6" fill="#159667"/><text x="510" y="202" fill="#203449">Urea</text></g>
+<text x="486" y="222" fill="#617488" font-size="10" font-weight="normal">Click again: show all</text></g><g id="flowdots-low"></g><g id="transport-low"></g><g id="ductArrows" opacity="0"><g fill="none" stroke="#1873cb" stroke-width="5"><path d="M418 155h-36 M418 245h-36 M418 340h-36 M418 425h-36 M418 500h-36"></path></g><g fill="#1873cb"><path d="M382 149l-12 6 12 6z M382 239l-12 6 12 6z M382 334l-12 6 12 6z M382 419l-12 6 12 6z M382 494l-12 6 12 6z"></path></g></g><g id="ureaArrow" opacity="0"><path d="M417 516h-52" stroke="#159567" stroke-dasharray="7 4" stroke-width="5"></path><path d="M365 510l-12 6 12 6z" fill="#159567"></path><text x="318" y="537" font-size="11" font-weight="bold" fill="#25744b">Urea recycling</text></g>
+<defs><clipPath id="cupClip"><path d="M382 640L397 735Q398 745 408 745H466Q476 745 477 735L492 640Z"/></clipPath></defs>
+<g id="urineCup">
+<path d="M382 640L397 735Q398 745 408 745H466Q476 745 477 735L492 640Z" fill="#f4f8fb"/>
+<rect id="cupFill" x="378" y="745" width="118" height="0" clip-path="url(#cupClip)"/>
+<path id="cupSurf" d="M378 745H496" stroke="rgba(0,0,0,.35)" stroke-width="2" fill="none" clip-path="url(#cupClip)"/>
+<path id="stOut" d="M437 574V700" fill="none" stroke="rgba(0,0,0,.3)" stroke-dasharray="7 5"/><path id="stIn" d="M437 574V700" fill="none" stroke-dasharray="7 5"/>
+<path d="M468 720H479M472 695H483M476 670H487" stroke="#555" stroke-width="2"/>
+<path d="M382 640L397 735Q398 745 408 745H466Q476 745 477 735L492 640Z" fill="none" stroke="#555" stroke-width="3" stroke-linejoin="round"/>
+<path d="M377 640H497" stroke="#555" stroke-width="4" stroke-linecap="round"/>
+<text x="368" y="668" text-anchor="end" font-size="12" font-style="italic" fill="#555">Daily urine volume</text>
+<text id="cupVol" x="368" y="694" text-anchor="end" font-size="22" font-weight="800" fill="#203449"></text>
+<text id="cupQual" x="368" y="716" text-anchor="end" font-size="12" font-weight="bold" fill="#34485a"></text>
+</g></svg>
+</section><aside class="detail"><div class="state" id="stateName">Normal hydration</div><div class="desc" id="description">Normal hydration: physiological ADH secretion allows moderate collecting-duct water reabsorption.</div><div class="metrics"><div>Effective ADH action <strong id="effective">50%</strong></div><div>Illustrative urine range <strong id="urineRange">50–1200 mOsm/kg</strong></div><div>Final urine osmolality <strong id="osm">approximately 550 mOsm/kg</strong></div><div>Urine volume <strong id="volume">Moderate</strong></div><div>Estimated urine volume <strong id="volNum">≈ 1.0 L/day</strong></div><div>Medullary urea contribution <strong id="ureaMetric">Present</strong></div><div>TAL water permeability <strong id="talMetric">Absent (normal)</strong></div></div><div class="explain" id="mechanism">Water exits the descending limb regardless of ADH. The ascending limb reabsorbs NaCl without water. ADH regulates collecting-duct water permeability.</div><div class="ureaSteps"><h3>How urea recycles</h3><ol>
+<li><b>Filtration and proximal tubule:</b> urea is freely filtered and about half is passively reabsorbed in the proximal tubule.</li>
+<li><b>Concentration in the fluid:</b> the thick ascending limb, distal tubule and cortical collecting duct let little urea through. Water reabsorption, helped by ADH, therefore concentrates urea in the fluid reaching the inner medullary collecting duct (IMCD).</li>
+<li><b>Exit from the IMCD:</b> ADH raises urea permeability of the IMCD (UT-A1/UT-A3), so urea diffuses into the inner medullary interstitium.</li>
+<li><b>Re-entry into the loop:</b> urea re-enters the thin limbs of the loop of Henle (for example via UT-A2) and travels back up to the collecting duct. It is recycled rather than excreted.</li>
+<li><b>Effect:</b> urea adds to inner medullary osmolality, which draws more water out of the collecting duct. In this model it contributes up to about 450 mOsm/kg.</li></ol></div><p class="caveat">Schematic teaching model. Five of ten green urea particles illustrate approximately 50% reabsorption of the filtered urea load in the proximal tubule (not a 50% fall in tubular urea concentration). Removing urea represents reduced medullary urea recycling (not complete elimination of urea from the body); the 750 mOsm/kg ceiling is an illustrative teaching assumption, not a fixed physiological value. Urine osmolality is illustrative, not a prediction for an individual patient. SIADH is represented by persistently high ADH action, not a specific diagnostic urine osmolality; actual values depend on water and solute intake. Select <b>central DI</b> to demonstrate correction by added ADH, or <b>nephrogenic DI</b> to demonstrate ADH resistance. For the hypothetical TAL mutation, ~150 mOsm/kg (minimum) and ~300 mOsm/kg (maximum) are illustrative assumptions, NOT established clinical values. The water-impermeable distal convoluted tubule continues to reabsorb NaCl and dilute tubular fluid. ADH can still affect collecting-duct water permeability, although medullary concentrating capacity is reduced. The actual result would depend on residual transport, permeability, urea recycling and other nephron segments. Values are illustrative. Estimated urine volume assumes about 600 mOsm of solute excreted per day, so volume is roughly 600 divided by urine osmolality; real daily solute loads vary.</p></aside></div></main><script>
+(function(){'use strict';
+let showUreaPath=false;
+const NS='http://www.w3.org/2000/svg', $=id=>document.getElementById(id);
+let phase=0, last=0, running=true, scenario='normal', adh=50, ureaPresent=true, diType='central';
+let visibleSolute='all';let curFinal=550;
+let visualAdh=0, visualUrea=1, visualTAL=0; // Animated physiological state, separate from selected target
+const path=$('flow-low'), len=path.getTotalLength(), flow=[], water=[], salt=[], urea=[];
+function circle(parent,color,r){const c=document.createElementNS(NS,'circle');c.setAttribute('r',r);c.setAttribute('fill',color);c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','.8');parent.appendChild(c);return c;}
+for(let i=0;i<42;i++)flow.push(circle($('flowdots-low'),'#177bd1',3.6));
+for(let i=0;i<13;i++)water.push(circle($('transport-low'),'#1873cb',4));
+for(let i=0;i<12;i++)salt.push(circle($('transport-low'),'#e83f48',4));
+for(let i=0;i<10;i++)urea.push(circle($('transport-low'),'#159567',4));
+// Recycled urea: IMCD -> interstitium -> thin limb -> distal nephron -> IMCD (closed loop)
+const loopPath=$('urea-loop'),loopLen=loopPath.getTotalLength(),recyc=[];
+for(let i=0;i<9;i++)recyc.push(circle($('transport-low'),'#159567',4));
+function pos(c,x,y,a){c.setAttribute('cx',x.toFixed(1));c.setAttribute('cy',y.toFixed(1));c.setAttribute('opacity',a);}
+function effective(){return scenario==='di' && diType==='nephrogenic'?0:adh;}
+function renderVisual(){
+ const f=visualAdh/100, ceiling=750+450*visualUrea;
+ const baseline=100+(ceiling-100)*Math.pow(f,1.15);
+ const mutationFinal=150+150*f; // Illustrative residual DCT dilution and ADH-dependent concentration
+ const final=Math.round(baseline*(1-visualTAL)+mutationFinal*visualTAL);curFinal=final;
+ $('effective').textContent=Math.round(visualAdh)+'%';
+ $('osm').textContent=final+' mOsm/kg';
+ $('urineRange').textContent=visualTAL>.995?'150–300 mOsm/kg; maximum 300 with ADH':visualTAL>.01?'Transitioning toward a 300 mOsm/kg ceiling':'~50–1200 mOsm/kg (illustrative)';
+ [300,600,900,1200].forEach((v,i)=>$('inter'+i).textContent=Math.round(v*(1-visualTAL)+300*visualTAL));
+ [300,600,900,1200,700,400,100,100].forEach((v,i)=>{const mut=[300,300,300,300,300,300,300,150][i];$('tub'+i).textContent=Math.round(v*(1-visualTAL)+mut*visualTAL);});
+ $('volume').textContent=visualTAL>.5?(f<.25?'High (residual dilution)':f>.75?'Lower (limited concentration)':'Moderate'):visualAdh<20?'High':visualAdh<65?'Moderate':'Low';
+ $('talMetric').textContent=visualTAL>.5?'Present (mutation)':'Absent (normal)';
+ $('talWaterArrows').setAttribute('opacity',visualTAL.toFixed(2));
+ const full=[150,300,400,600,900,1200], reduced=[150,280,350,470,610,750];
+ for(let i=0;i<6;i++){
+   const concentrated=reduced[i]+(full[i]-reduced[i])*visualUrea;
+   $('cd'+i).textContent=Math.round((100+(concentrated-100)*f)*(1-visualTAL)+(150+150*f*(i+1)/6)*visualTAL);
+ }
+ $('ductArrows').setAttribute('opacity',f.toFixed(2));
+ const uf=visualUrea*Math.max(0,(f-.35)/.65);
+ $('ureaArrow').setAttribute('opacity',uf.toFixed(2));
+ $('ureaGlow').setAttribute('opacity',uf.toFixed(2));
+ $('ureaMetric').textContent=(ureaPresent?'≈ ':'Reduced · ≈ ')+Math.round(450*visualUrea*Math.pow(f,1.15))+' mOsm/kg';
+}
+function update(){
+ const e=effective();
+ $('adhStatus').textContent=(scenario==='siadh'?'Inappropriate ADH action: ':'ADH level: ')+adh+'%'+(scenario==='di'?(diType==='central'?' (responsive)':' (resistant)'):'');
+ $('diTypeWrap').style.display=scenario==='di'?'flex':'none';
+ $('ureaStatus').textContent='Urea recycling: '+(ureaPresent?'on':'off');
+  $('addUrea').classList.toggle('active',ureaPresent);
+ $('removeUrea').classList.toggle('active',!ureaPresent);
+ const names={normal:'Normal hydration',over:'Overhydration',dehyd:'Dehydration',di:diType==='central'?'Central diabetes insipidus':'Nephrogenic diabetes insipidus',siadh:'SIADH — inappropriate antidiuresis',tal:'Hypothetical TAL water-permeable mutation'};
+ const desc={normal:'Normal fluid balance produces an intermediate physiological ADH effect. Some water leaves the collecting duct while some continues into urine; urine concentration is moderate.',over:'Excess water suppresses ADH secretion. The collecting duct remains relatively impermeable to water, producing dilute urine.',dehyd:'Water deficit stimulates ADH secretion. Watch many more blue water particles leave the collecting duct as aquaporin-2 insertion increases its water permeability.',di:diType==='central'?'ADH secretion is deficient. Press + Add ADH to restore collecting-duct water permeability and gradually concentrate the urine.':'The kidneys are resistant to ADH. Even when ADH is added, collecting-duct water reabsorption remains impaired and urine stays dilute.',siadh:'ADH action remains inappropriately high despite water retention and low plasma osmolality. Water reabsorption continues and urine is inappropriately concentrated.',tal:'Idealised severe TAL defect: water now leaves the TAL. The simulation assumes marked impairment of countercurrent multiplication. The distal convoluted tubule still reabsorbs NaCl without water, so urine can be diluted below 300 mOsm/kg. With high ADH, final urine osmolality is 300 mOsm/kg in this idealised model. Removing ADH permits distal dilution below 300 mOsm/kg (illustratively down to 150 mOsm/kg).'};
+ $('stateName').textContent=names[scenario];$('description').textContent=desc[scenario];
+ $('mechanism').textContent=(ureaPresent?'':'With urea recycling reduced, the inner medullary osmotic gradient is weaker, limiting maximal urine concentration even with ADH. ')+(scenario==='tal'?'Hypothetical TAL mutation: water now leaves the thick ascending limb, which normally reabsorbs NaCl but not water. This blunts dilution of the tubular fluid and reduces countercurrent multiplication. ADH can still act on the collecting duct, but NCC-mediated NaCl reabsorption in the water-impermeable distal convoluted tubule still permits dilution below 300 mOsm/kg. This teaching model sets final urine osmolality to 300 mOsm/kg with maximal ADH and allows dilution to ~150 mOsm/kg with minimal ADH; neither is a clinically established prediction.':scenario==='siadh'?'SIADH: inappropriate sustained ADH action increases collecting-duct water reabsorption despite low plasma osmolality. Urine remains inappropriately concentrated; the retained water can cause dilutional hyponatraemia.':scenario==='di'?(diType==='central'?'Central DI: absent endogenous ADH causes dilute urine. Adding ADH (desmopressin in clinical practice) increases AQP2 insertion, water reabsorption and urine concentration.':'Nephrogenic DI: circulating ADH may be high, but collecting-duct response is impaired. Adding ADH here does not increase water permeability.'):e>20?'ADH increases water reabsorption along the collecting duct and promotes inner-medullary urea permeability. The descending limb remains water-permeable.':'The descending limb still loses water, and the ascending limb still reabsorbs NaCl. Without effective ADH, the collecting duct reabsorbs little water.');
+ for(const id of ['normal','over','dehyd','di','siadh','talMutation'])$(id).classList.toggle('active',(id==='talMutation' ? scenario==='tal' : id===scenario));
+}
+function choose(s){scenario=s;adh=s==='normal'?50:(s==='over'||s==='di')?0:100;update();}
+$('diType').onchange=function(){diType=this.value;adh=0;update()};
+$('normal').onclick=()=>choose('normal');$('over').onclick=()=>choose('over');$('dehyd').onclick=()=>choose('dehyd');$('di').onclick=()=>choose('di');$('siadh').onclick=()=>choose('siadh');$('talMutation').onclick=()=>choose('tal');
+$('addADH').onclick=()=>{adh=Math.min(100,adh+25);update()};
+$('removeADH').onclick=()=>{adh=Math.max(0,adh-25);update()};
+$('showUreaPath').onclick=()=>{showUreaPath=!showUreaPath;$('ureaPathOverlay').setAttribute('opacity',showUreaPath?'1':'0');$('showUreaPath').classList.toggle('active',showUreaPath);$('showUreaPath').setAttribute('aria-pressed',String(showUreaPath));$('showUreaPath').textContent=showUreaPath?'↝ Hide urea pathway':'↝ Show urea pathway';};
+$('addUrea').onclick=()=>{ureaPresent=true;update()};
+$('removeUrea').onclick=()=>{ureaPresent=false;update()};
+$('play').onclick=()=>{running=!running;$('play').textContent=running?'⏸ Pause':'▶ Play'};
+$('reset').onclick=()=>{phase=0;running=true;$('play').textContent='⏸ Pause';ureaPresent=true;choose('normal');draw()};
+$('speed').oninput=()=>{$('speedval').textContent=$('speed').value};
+// Solutes travel within the same tubular lumen as water before leaving at a transport site.
+// Path progress is calculated using the existing nephron centreline, from the glomerular inlet.
+function along(t){const p=path.getPointAtLength(Math.max(0,Math.min(.999999,t))*len);return [p.x,p.y]}
+function depart(c,t,site,dx,dy,enabled){
+  // Each particle begins at the glomerular inlet, traverses the lumen,
+  // then crosses the tubule wall at its own transport site.
+  const exitWindow=.16;
+  if(t<site || !enabled){const p=along(t);pos(c,p[0],p[1],1);return;}
+  if(t<site+exitWindow){const q=(t-site)/exitWindow,p=along(site);
+    pos(c,p[0]+dx*q,p[1]+dy*q,1-q*.85);return;}
+  pos(c,0,0,0);
+}
+function updateLegend(){
+ ['water','salt','urea'].forEach(type=>{const item=$('legend-'+type);const chosen=visibleSolute===type;item.classList.toggle('selected',chosen);item.classList.toggle('dimmed',visibleSolute!=='all'&&!chosen);item.setAttribute('aria-pressed',String(chosen));});
+}
+['water','salt','urea'].forEach(type=>{const item=$('legend-'+type);const activate=()=>{visibleSolute=visibleSolute===type?'all':type;updateLegend();draw();};item.addEventListener('click',activate);item.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate();}});});
+function applyParticleFilter(){
+ const showWater=visibleSolute==='all'||visibleSolute==='water';
+ const showSalt=visibleSolute==='all'||visibleSolute==='salt';
+ const showUrea=visibleSolute==='all'||visibleSolute==='urea';
+ [[flow,showWater],[water,showWater],[salt,showSalt],[urea,showUrea],[recyc,showUrea]].forEach(([dots,show])=>{if(!show)dots.forEach(c=>c.setAttribute('opacity','0'));});
+}
+function draw(){const f=visualAdh/100;
+ // Blue: water travels along the nephron; ADH progressively diverts more
+ // blue particles out of the collecting duct into the interstitium.
+ // A larger visible stream of blue particles represents tubular water.
+ // As ADH rises, a progressively larger fraction exits the collecting duct,
+ // while with minimal ADH most continue to the urine outlet.
+ flow.forEach((c,i)=>{
+   const t=(phase*.065+i/flow.length)%1;
+   if(visualTAL>.005 && i%4===0 && t>=.575 && t<.735){const q=Math.min(1,(t-.575)/.16),p=along(.575);pos(c,p[0]-65*q,p[1],visualTAL*(1-q*.85)+(1-visualTAL));return;}
+   const fraction=((i*17)%43)/43; // stable distribution of reabsorbed particles
+   const reabsorb=fraction < .82*f;
+   const site=.77 + ((i*7)%19)/19*.19; // distributed along collecting duct
+   if(reabsorb && t>=site){
+     const q=Math.min(1,(t-site)/.065),p=along(site);
+     const side=i%2===0?-1:1;
+     pos(c,p[0]+side*105*q,p[1]+(i%3-1)*8*q,Math.max(0,1-q));
+   }else{const p=along(t);pos(c,p[0],p[1],1);}
+ });
+ // Additional blue particles visibly cross the collecting duct wall.
+ // They are inactive at low ADH and become prominent during dehydration.
+ water.forEach((c,i)=>{
+   const t=(phase*.065+i/water.length)%1;
+   if(i<4){
+     depart(c,t,.11+i*.045,-75,0,true);
+   }else if(i>=9 && visualTAL>.005){
+     const site=.56+(i-9)*.017;const p=along(site),q=(phase*.12+i*.27)%1;pos(c,p[0]-q*65,p[1],visualTAL*(1-q*.85));
+   }else{
+     const site=.77+((i-4)%9)*.022;
+     const p=along(site),q=((phase*.12+i*.27)%1);
+     const side=i%2===0?-1:1;
+     pos(c,p[0]+side*(12+q*105),p[1],f*(1-q*.85));
+   }
+ });
+ // Red: NaCl remains in filtrate until the ascending limb; some exits
+ // passively in the thin segment and actively in the thick ascending limb.
+ salt.forEach((c,i)=>{
+   const t=(phase*.065+i/salt.length)%1;
+   const site=.43+(i%6)*.037;
+   depart(c,t,site,75,0,true);
+ });
+ // Green: a subset is reabsorbed early (schematic proximal segment),
+ // while the remainder travels onward; ADH promotes IMCD urea reabsorption.
+ urea.forEach((c,i)=>{
+   const t=(phase*.065+i/urea.length)%1;
+   const proximal=i<5; // 5 of 10 green particles = approximately 50% of filtered urea reabsorbed in proximal tubule
+   const site=proximal ? .008+i*.004 : .86+(i%5)*.018;
+   const active=proximal || (ureaPresent&&f>.35);
+   depart(c,t,site,proximal?-45:-80,0,active);
+   c.setAttribute('opacity',String(Number(c.getAttribute('opacity'))*(.18+.82*visualUrea)));
+ });
+ const uf=visualUrea*Math.max(0,(f-.35)/.65);
+ recyc.forEach((c,i)=>{const t=(phase*.065*len/loopLen+i/recyc.length)%1,p=loopPath.getPointAtLength(t*loopLen);pos(c,p.x,p.y,uf*(t>.83?.65:1))});
+ applyParticleFilter();
+}
+
+// Urine cup: fill level and stream thickness follow estimated daily volume (about 600 mOsm / urine osmolality)
+const cupFill=$('cupFill'),cupSurf=$('cupSurf'),stOut=$('stOut'),stIn=$('stIn');let cupF=.3,stOff=0;
+function urineColor(U){const t=Math.max(0,Math.min(1,(U-100)/1100)),m=(a,b)=>Math.round(a+(b-a)*t);return 'rgb('+m(253,214)+','+m(246,140)+','+m(190,20)+')';}
+function renderCup(dt){
+ const U=Math.max(50,curFinal),vol=600/U,tgt=.08+.92*Math.min(1,Math.max(0,(vol-.5)/5.5));
+ cupF+=(tgt-cupF)*Math.min(1,dt*2.2);
+ const h=cupF*100,y=745-h,c=urineColor(U),d='M437 574V'+y,sw=2+Math.min(vol,6)*.8;
+ cupFill.setAttribute('y',y);cupFill.setAttribute('height',h);cupFill.setAttribute('fill',c);cupSurf.setAttribute('d','M378 '+y+'H496');
+ if(running)stOff-=dt*60*Number($('speed').value)/5;
+ [stOut,stIn].forEach((p,i)=>{p.setAttribute('d',d);p.setAttribute('stroke-width',sw+(i?0:2));p.setAttribute('stroke-dashoffset',stOff)});stIn.setAttribute('stroke',c);
+ const txt='≈ '+vol.toFixed(1)+' L/day';$('cupVol').textContent=txt;$('volNum').textContent=txt;
+ $('cupQual').textContent=U<=150?'Very dilute · large volume':U<=450?'Near isosmotic':U<900?'Concentrated · less volume':'Highly concentrated · small volume';
+}
+
+function frame(ms){
+ if(!last)last=ms;
+ const dt=Math.min((ms-last)/1000,.06);last=ms;
+ // About 1.5 seconds for most of a condition change; independent of particle speed.
+ const blend=1-Math.exp(-dt*2.6);
+ visualAdh+=(effective()-visualAdh)*blend;
+ visualUrea+=((ureaPresent?1:0)-visualUrea)*blend;
+ visualTAL+=((scenario==='tal'?1:0)-visualTAL)*blend;
+ if(Math.abs(effective()-visualAdh)<.03)visualAdh=effective();
+ if(Math.abs((ureaPresent?1:0)-visualUrea)<.0003)visualUrea=ureaPresent?1:0;
+ if(running)phase+=dt*Number($('speed').value)/5;
+ renderVisual();draw();renderCup(dt);requestAnimationFrame(frame);
+}
+updateLegend();choose('normal');renderVisual();draw();renderCup(1);requestAnimationFrame(frame);
+})();
+</script></body></html>
